@@ -21,6 +21,12 @@ let package = Package(
         .target(
             name: "SwiftShell",
             dependencies: []),
+        .executableTarget(
+            name: "ShellSimulator",
+            dependencies: [
+                "SwiftShell"
+            ]
+        ),
         .testTarget(
             name: "SwiftShellTests",
             dependencies: ["SwiftShell"]),
