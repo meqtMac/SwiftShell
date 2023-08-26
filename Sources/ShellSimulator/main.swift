@@ -1,6 +1,6 @@
 //
 //  File.swift
-//  
+//
 //
 //  Created by 蒋艺 on 2023/6/11.
 //
@@ -70,28 +70,27 @@ struct ShellPrompt {
         
         func drawComponent(at shell: MyShell) -> String {
             switch self {
-                case .user:
-                    return ANSI(color: .lightGreen, string: NSUserName())
-                case .path:
-                    let path = shell.filemanager.currentDirectoryPath
-                    return ANSI(color: .backgroundCyan, string: path)
-                case .lastPathComponent:
-                    var path = "/"
-                    if #available(macOS 13.0, *) {
-                        path = URL(filePath: shell.filemanager.currentDirectoryPath).lastPathComponent
-                    }
-                    return ANSI(color: .cyan, string: path)
-                case .character(let char):
-                    return ANSI(color: .cyan, string: String(char))
-                case .string(let str):
-                    return ANSI(color: .blue, string: str)
+            case .user:
+                return ANSI(color: .lightGreen, string: NSUserName())
+            case .path:
+                let path = shell.filemanager.currentDirectoryPath
+                return ANSI(color: .backgroundCyan, string: path)
+            case .lastPathComponent:
+                var path = "/"
+                if #available(macOS 13.0, *) {
+                    path = URL(filePath: shell.filemanager.currentDirectoryPath).lastPathComponent
+                }
+                return ANSI(color: .cyan, string: path)
+            case .character(let char):
+                return ANSI(color: .cyan, string: String(char))
+            case .string(let str):
+                return ANSI(color: .blue, string: str)
             }
         }
     }
 }
 
 enum ANSIColor: String {
-    case reset = "\u{001B}[0m"
     case bold = "\u{001B}[1m"
     case dim = "\u{001B}[2m"
     case italic = "\u{001B}[3m"
@@ -135,6 +134,10 @@ enum ANSIColor: String {
     case backgroundLightMagenta = "\u{001B}[105m"
     case backgroundLightCyan = "\u{001B}[106m"
     case backgroundLightWhite = "\u{001B}[107m"
+    
+    static var reset: String  {
+        "\u{001B}[0m"
+    }
 }
 
 enum XtermColor: CustomStringConvertible {
@@ -152,29 +155,29 @@ enum XtermColor: CustomStringConvertible {
     
     var description: String {
         switch self {
-            case .reset:
-                return "\u{001B}[0m"
-            case .bold:
-                return "\u{001B}[1m"
-            case .dim:
-                return "\u{001B}[2m"
-            case .italic:
-                return "\u{001B}[3m"
-            case .underline:
-                return "\u{001B}[4m"
-            case .blink:
-                return "\u{001B}[5m"
-            case .inverse:
-                return "\u{001B}[7m"
-            case .hidden:
-                return "\u{001B}[8m"
-            case .strikethrough:
-                return "\u{001B}[9m"
-                
-            case .foregroundColor(let code):
-                return "\u{001B}[38;5;\(code)m"
-            case .backgroundColor(let code):
-                return "\u{001B}[48;5;\(code)m"
+        case .reset:
+            return "\u{001B}[0m"
+        case .bold:
+            return "\u{001B}[1m"
+        case .dim:
+            return "\u{001B}[2m"
+        case .italic:
+            return "\u{001B}[3m"
+        case .underline:
+            return "\u{001B}[4m"
+        case .blink:
+            return "\u{001B}[5m"
+        case .inverse:
+            return "\u{001B}[7m"
+        case .hidden:
+            return "\u{001B}[8m"
+        case .strikethrough:
+            return "\u{001B}[9m"
+            
+        case .foregroundColor(let code):
+            return "\u{001B}[38;5;\(code)m"
+        case .backgroundColor(let code):
+            return "\u{001B}[48;5;\(code)m"
         }
     }
 }
@@ -193,7 +196,7 @@ struct ColoredString {
 }
 
 func ANSI(color: ANSIColor, string: String) -> String {
-    return "\(color.rawValue)\(string)\(ANSIColor.reset.rawValue)"
+    return "\(color.rawValue)\(string)\(ANSIColor.reset)"
 }
 
 func Xterm(color: XtermColor, string: String) -> String {
