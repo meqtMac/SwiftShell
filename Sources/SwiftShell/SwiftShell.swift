@@ -1,4 +1,5 @@
 import Foundation
+//import Darwin
 
 public func ls() throws -> String {
     let process = Process()
@@ -32,55 +33,24 @@ public func cd(to destination: String) throws {
     FileManager.default.changeCurrentDirectoryPath(destination)
 }
 
-public enum Git {
-    public static func status() throws -> String  {
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
-        process.arguments = ["git", "status"]
-        let pipe = Pipe()
-        process.standardOutput = pipe
-        try? process.run()
-        process.waitUntilExit()
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        return String(data: data, encoding: .utf8)!
-    }
+public func clear() {
+    print("\u{001B}[2J\u{001B}[;H")
 }
 
 public enum Swift {
+    static let command = "swift"
+    
     public var version: String {
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
-        process.arguments = ["swift", "--version"]
-        let pipe = Pipe()
-        process.standardOutput = pipe
-        try? process.run()
-        process.waitUntilExit()
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        return String(data: data, encoding: .utf8)!
+        runCmd(executableURLPath: envPath, command: Self.command, options: ["--version"])
     }
     
-    public static func build() throws -> String {
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
-        process.arguments = ["swift", "build"]
-        let pipe = Pipe()
-        process.standardOutput = pipe
-        try? process.run()
-        process.waitUntilExit()
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        return String(data: data, encoding: .utf8)!
+    public static func build() {
+        print( runCmd(executableURLPath: envPath, command: Self.command, options: ["build"]) )
     }
     
     public static var help: String {
-        let process = Process()
-        process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
-        process.arguments = ["swift", "--help"]
-        let pipe = Pipe()
-        process.standardOutput = pipe
-        try? process.run()
-        process.waitUntilExit()
-        let data = pipe.fileHandleForReading.readDataToEndOfFile()
-        return String(data: data, encoding: .utf8)!
+        runCmd(executableURLPath: envPath, command: Self.command, options: ["--help"])
     }
 }
+
 

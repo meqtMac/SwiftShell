@@ -7,6 +7,11 @@
 
 import Foundation
 
+let lines = CommandLine.arguments
+print(lines.map { str in
+    str.split(separator: " ").joined(separator: "\n")
+})
+
 struct MyShell{
     let prompt: ShellPrompt = ShellPrompt {
         ShellPrompt.PromptComponent.user
