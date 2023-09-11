@@ -18,19 +18,12 @@ public func exit(_ n: Int32 = 0) {
 }
 
 public var pwd: String {
-    let process = Process()
-    process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
-    process.arguments = ["pwd"]
-    let pipe = Pipe()
-    process.standardOutput = pipe
-    try? process.run()
-    process.waitUntilExit()
-    let data = pipe.fileHandleForReading.readDataToEndOfFile()
-    return String(data: data, encoding: .utf8)!
+    FileManager.default.currentDirectoryPath
 }
 
-public func cd(to destination: String) throws {
-    FileManager.default.changeCurrentDirectoryPath(destination)
+prefix operator =>
+public prefix func =>(_ path: String) throws {
+    FileManager.default.changeCurrentDirectoryPath(path)
 }
 
 public func clear() {
@@ -40,16 +33,25 @@ public func clear() {
 public enum Swift {
     static let command = "swift"
     
-    public var version: String {
+    public static var version: String {
         runCmd(executableURLPath: envPath, command: Self.command, options: ["--version"])
     }
     
     public static func build() {
-        print( runCmd(executableURLPath: envPath, command: Self.command, options: ["build"]) )
+//        print( runCmd(executableURLPath: envPath, command: Self.command, options: ["build"]) )
+        runCommand(executableURLPath: envPath, command: Self.command, options: ["build"])
     }
     
     public static var help: String {
         runCmd(executableURLPath: envPath, command: Self.command, options: ["--help"])
+    }
+    
+    public static func repl() {
+        runCommand(executableURLPath: envPath, command: Self.command, options: ["repl"])
+    }
+    
+    public static func run() {
+        runCommand(executableURLPath: envPath, command: Self.command, options: ["run"])
     }
 }
 

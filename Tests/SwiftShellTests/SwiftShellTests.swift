@@ -1,5 +1,5 @@
 import XCTest
-@testable import SwiftShell
+@testable import Shell
 
 final class SwiftShellTests: XCTestCase {
     func testExample() throws {
